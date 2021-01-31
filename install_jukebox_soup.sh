@@ -3,7 +3,7 @@
 git config --global user.email "hanoi7@gmail.com"
 git config --global user.name "lamtharnhantrakul"
 
-sudo apt-get install python3-pip
+sudo apt-get -y install python3-pip
 
 /usr/bin/python3 -m pip install --upgrade pip3
 
