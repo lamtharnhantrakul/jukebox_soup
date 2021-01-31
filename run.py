@@ -31,9 +31,9 @@ max_batch_size = 3 if model in ('5b', '5b_lyrics') else 16
 hps.levels = 3
 hps.hop_fraction = [.5,.5,.125]
 
-#vqvae, *priors = MODELS[model]
-#vqvae = make_vqvae(setup_hparams(vqvae, dict(sample_length = 1048576)), device)
-#top_prior = make_prior(setup_hparams(priors[-1], dict()), vqvae, device)
+vqvae, *priors = MODELS[model]
+vqvae = make_vqvae(setup_hparams(vqvae, dict(sample_length = 1048576)), device)
+top_prior = make_prior(setup_hparams(priors[-1], dict()), vqvae, device)
 
 ### CELL: Select Mode
 if MODE == 'ancestral':
@@ -48,7 +48,9 @@ elif MODE == 'primed':
     codes_file=None
     # Specify an audio file here.
     audio_file = './inputs/primer_test.wav'
-    if os.path.isfile():
-        print("Using audio file: ", Specify)
+    if os.path.isfile(audio_file):
+        print("Found audio file: ", audio_file)
+    else:
+        print("Could not find file!")
     # Specify how many seconds of audio to prime on.
     prompt_length_in_seconds=PROMPT_LENGTH_IN_SECONDS
