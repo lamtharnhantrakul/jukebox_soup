@@ -1,0 +1,47 @@
+<html><head><title>2</title></head><body style='font-family: sans-serif; font-size: 1.4em; font-weight: bold; text-align: center; max-width:1024px; width: 100%; margin: auto;'>
+<link rel='icon' href='data:;base64,iVBORw0KGgo='>
+<img id='align.png' src='align.png' \>
+<audio id='audio.wav' src='audio.wav' style='width: 100%;' controls></audio>
+<pre style='white-space: pre-wrap;'><div>Artist Rick Astley, Genre Pop</div>
+<span id='2/0'></span><span id='2/1'>
+</span><span id='2/2'> </span><span id='2/3'> </span><span id='2/4'> </span><span id='2/5'> </span><span id='2/6'> </span><span id='2/7'> </span><span id='2/8'> </span><span id='2/9'> </span><span id='2/10'> </span><span id='2/11'> </span><span id='2/12'> </span><span id='2/13'> </span><span id='2/14'> </span><span id='2/15'> </span><span id='2/16'> </span><span id='2/17'> </span><span id='2/18'> </span><span id='2/19'> </span><span id='2/20'> </span><span id='2/21'> </span><span id='2/22'>N</span><span id='2/23'>e</span><span id='2/24'>v</span><span id='2/25'>e</span><span id='2/26'>r</span><span id='2/27'> </span><span id='2/28'>g</span><span id='2/29'>o</span><span id='2/30'>n</span><span id='2/31'>n</span><span id='2/32'>a</span><span id='2/33'> </span><span id='2/34'>g</span><span id='2/35'>i</span><span id='2/36'>v</span><span id='2/37'>e</span><span id='2/38'> </span><span id='2/39'>y</span><span id='2/40'>o</span><span id='2/41'>u</span><span id='2/42'> </span><span id='2/43'>u</span><span id='2/44'>p</span><span id='2/45'>
+</span><span id='2/46'> </span><span id='2/47'> </span><span id='2/48'> </span><span id='2/49'> </span><span id='2/50'> </span><span id='2/51'> </span><span id='2/52'> </span><span id='2/53'> </span><span id='2/54'> </span><span id='2/55'> </span><span id='2/56'> </span><span id='2/57'> </span><span id='2/58'> </span><span id='2/59'> </span><span id='2/60'> </span><span id='2/61'> </span><span id='2/62'> </span><span id='2/63'> </span><span id='2/64'> </span><span id='2/65'> </span><span id='2/66'>N</span><span id='2/67'>e</span><span id='2/68'>v</span><span id='2/69'>e</span><span id='2/70'>r</span><span id='2/71'> </span><span id='2/72'>g</span><span id='2/73'>o</span><span id='2/74'>n</span><span id='2/75'>n</span><span id='2/76'>a</span><span id='2/77'> </span><span id='2/78'>l</span><span id='2/79'>e</span><span id='2/80'>t</span><span id='2/81'> </span><span id='2/82'>y</span><span id='2/83'>o</span><span id='2/84'>u</span><span id='2/85'> </span><span id='2/86'>d</span><span id='2/87'>o</span><span id='2/88'>w</span><span id='2/89'>n</span><span id='2/90'>
+</span><span id='2/91'> </span><span id='2/92'> </span><span id='2/93'> </span><span id='2/94'> </span><span id='2/95'> </span><span id='2/96'> </span><span id='2/97'> </span><span id='2/98'> </span><span id='2/99'> </span><span id='2/100'> </span><span id='2/101'> </span><span id='2/102'> </span><span id='2/103'> </span><span id='2/104'> </span><span id='2/105'> </span><span id='2/106'> </span><span id='2/107'> </span><span id='2/108'> </span><span id='2/109'> </span></pre>
+<script>
+            async function fetchAsync (url) {
+                let response = await fetch(url);
+                let data = await response.json();
+                return data;
+            }
+    
+            var audio = document.getElementById('audio.wav');
+            audio.onplay = function () {
+                track = '2'
+                fetchAsync('align.json')
+                .then(data => animateLyrics(data, track, this))
+                .catch(reason => console.log(reason.message))
+            }; 
+    
+            function animateLyrics(data, track, audio) {
+                var animate = setInterval(function () {
+                    var time = Math.floor(audio.currentTime*645/audio.duration);
+                    if (!(time == 0 || time == 645)) {
+                        console.log(time);
+                        changeColor(data, track, audio, time);
+                    }
+                    if (audio.paused) {
+                        clearInterval(animate);
+                    }
+                }, 50);
+            }
+    
+            function changeColor(data, track, audio, time) {
+                colors = data[time]
+                for (i = 0; i < colors.length; i++){
+                    character = document.getElementById(track + '/' + i.toString());
+                    color = Math.max(230 - 10*colors[i], 0).toString();
+                    character.style.color = 'rgb(255,' + color + ',' + color + ')';
+                }
+            }
+            </script>
+</body></html>

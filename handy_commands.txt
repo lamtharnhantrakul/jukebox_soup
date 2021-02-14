@@ -1,0 +1,3 @@
+# Show GPU memory status
+nvidia-smi
+
