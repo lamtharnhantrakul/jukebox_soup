@@ -22,6 +22,8 @@ GEN_LENGTH_IN_SECONDS = 30
 
 SAMPLING_TEMP = 0.98
 
+UPSAMPLE_LEVEL_0 = True  # High quality upsampling
+
 ### --------------- BEGIN NOTEBOOK --------------
 
 ### CELL: Sample from the 5B or 1B Lyrics Model
@@ -58,8 +60,8 @@ elif MODE == 'primed':
     else:
         print("Could not find file!")
     # Specify how many seconds of audio to prime on.
-    prompt_length_in_seconds=PROMPT_LENGTH_IN_SECONDS
-
+    prompt_length_in_seconds=PROMPT_LENGTH_IN_SECONDS    
+    
 ### CELL: Resume from last checkpoint file
 if os.path.exists(hps.name):
   # Identify the lowest level generated and continue from there.
@@ -135,3 +137,18 @@ elif sample_hps.mode == 'primed':
     zs = _sample(zs, labels, sampling_kwargs, [None, None, top_prior], [2], hps)
 else:
     raise ValueError(f'Unknown sample mode {sample_hps.mode}.')
+    
+if UPSAMPLE_LEVEL_0:
+    ### CELL: Load upsamplers
+    # Set this False if you are on a local machine that has enough memory (this allows you to do the
+    # lyrics alignment visualization during the upsampling stage). For a hosted runtime, 
+    # we'll need to go ahead and delete the top_prior if you are using the 5b_lyrics model.
+    if False:
+      del top_prior
+      empty_cache()
+      top_prior=None
+    upsamplers = [make_prior(setup_hparams(prior, dict()), vqvae, 'cpu') for prior in priors[:-1]]
+    labels[:2] = [prior.labeller.get_batch_labels(metas, 'cuda') for prior in upsamplers]
+
+    ### CELL: Upsample!
+    zs = upsample(zs, labels, sampling_kwargs, [*upsamplers, top_prior], hps)
